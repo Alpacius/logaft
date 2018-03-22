@@ -7,10 +7,14 @@
 static struct task_executor *default_executor = NULL;
 static struct recrouter *default_rrouter = NULL;
 
+static int laft_running = 0;
+
 int laft_init(void) {
-    // TODO refactor
-    default_executor = task_executor_create(N_LOG_THREADS);
-    default_rrouter = simple_rrouter_create(N_LOG_THREADS);
+    if (!laft_running) {
+        default_executor = task_executor_create(N_LOG_THREADS);
+        default_rrouter = simple_rrouter_create(N_LOG_THREADS);
+        laft_running = 1;
+    }
     return 0;
 }
 
