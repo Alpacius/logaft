@@ -14,7 +14,7 @@ struct mbuf {
 
 // TODO alpacius - long cstr split
 static inline
-struct mbuf *mbuf_create(const char *cstr) {
+struct mbuf *mbuf_create_cstr(const char *cstr) {
     size_t cap = strlen(cstr) + 1;
     struct mbuf *mb = malloc(sizeof(struct mbuf) + sizeof(char) * cap);
     return mb ? 
@@ -41,7 +41,7 @@ void mbuf_destroy(struct mbuf *mb) {
 
 static inline
 int mbuf_append_cstr(struct mbuf *master, const char *cstr) {
-    struct mbuf *slave = mbuf_create(cstr);
+    struct mbuf *slave = mbuf_create_cstr(cstr);
     if (unlikely(slave == NULL))
         return 0;
     return list_add_tail(intrusion_from_ptr(slave), &(master->lead)), (master->nblks++), 1;
