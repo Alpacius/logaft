@@ -1,5 +1,13 @@
 #include    "mbuf.h"
 
+struct mbuf {
+    intrusive;
+    struct link_index lead;
+    size_t size, cap;
+    uint32_t nblks;
+    char blk[];
+};
+
 struct mbuf *mbuf_create_cstr(const char *cstr) {
     size_t cap = strlen(cstr) + 1;
     struct mbuf *mb = malloc(sizeof(struct mbuf) + sizeof(char) * cap);
