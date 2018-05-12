@@ -18,6 +18,8 @@ struct tasklet {
 #define     tasklet_host(p_, t_)    container_of((p_), t_, tasklet_ctl_)
 
 struct task_executor {
+    int active;
+    pthread_barrier_t active_barrier;
     uint32_t size;
     struct recrouter *logrec_router;
     struct tqueue tasks;
