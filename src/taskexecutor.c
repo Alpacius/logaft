@@ -29,6 +29,7 @@ int task_executor_sumbit(struct task_executor *e, struct tasklet *t) {
 
 static
 void *task_worker_loop(void *arg) {
+    struct task_executor *e = arg;
     // TODO implementation
     return NULL;
 }
