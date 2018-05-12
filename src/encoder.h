@@ -6,7 +6,7 @@
 #include    "mbuf.h"
 
 struct laft_encoder {
-    struct mbuf (*log_encode)(struct laft_encoder *, const char *);
+    struct mbuf *(*log_encode)(struct laft_encoder *, const char *);
 };
 
 #define     encoder                 struct laft_encoder encoder_ctl_
