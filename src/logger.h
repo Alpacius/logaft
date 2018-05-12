@@ -12,6 +12,8 @@
 #define     LAFT_LOGLEVEL_TRACE     4
 #define     LAFT_LOGLEVEL_DEBUG     5
 
+#define     LAFT_LOGLEVEL_SINK     -1
+
 struct laft_logger {
     uint64_t id;
     intrusive;
