@@ -18,7 +18,9 @@ void task_executor_ruin(struct task_executor *e, struct link_index *t) {
     void *tret = NULL;
     for (uint32_t i = 0; i < e->size; i++)
         pthread_join(&(e->workers[i]), &tret);
-    // TODO dump tasks for further deletion
+    if (t) {
+        // TODO dump tasks for further deletion
+    }
     tqueue_ruin(&(e->tasks));
 }
 

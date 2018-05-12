@@ -39,3 +39,5 @@ void tqueue_push_back(struct tqueue *tq, struct link_index *elt) {
     pqueue_push_back(tq->q, elt);
     sem_post(&(tq->sem));   // XXX dangerous
 } 
+
+// TODO post-decay unsafe operations
