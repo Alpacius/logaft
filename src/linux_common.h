@@ -6,6 +6,7 @@
 #include    <fcntl.h>
 #include    <ucontext.h>
 #include    <pthread.h>
+#include    <semaphore.h>
 #include    <time.h>
 #include    <sys/epoll.h>
 #include    <sys/eventfd.h>

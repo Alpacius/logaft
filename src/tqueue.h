@@ -6,7 +6,7 @@
 
 struct tqueue {
     uint32_t size;
-    int *evfds;
+    sem_t sem;
     struct pqueue *q;
 };
 
