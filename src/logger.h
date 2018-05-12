@@ -2,6 +2,7 @@
 
 #include    "stdc_common.h"
 #include    "linux_common.h"
+#include    "list.h"
 #include    "appender.h"
 
 #define     LAFT_LOGLEVEL_FATAL     0
@@ -13,6 +14,7 @@
 
 struct laft_logger {
     uint64_t id;
+    intrusive;
     int level;
     struct link_index appenders;
 };

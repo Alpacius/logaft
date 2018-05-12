@@ -4,6 +4,7 @@ struct mbuf {
     intrusive;
     struct link_index lead;
     size_t size, cap;
+    uint32_t refcnt;
     uint32_t nblks;
     char blk[];
 };
@@ -16,12 +17,19 @@ struct mbuf *mbuf_create_cstr(const char *cstr) {
         list_init(&(mb->lead)), 
         (mb->size = mb->cap = cap), 
         (mb->nblks = 1),
+        (mb->refcnt = 1),
         memcpy(mb->blk, cstr, sizeof(char) * cap), 
         mb :
         NULL;
 }
 
+void mbuf_borrow(struct mbuf *mb) {
+    __atomic_add_fetch(&(mb->refcnt), 1, __ATOMIC_ACQ_REL);
+}
+
 void mbuf_destroy(struct mbuf *mb) {
+    if (__atomic_sub_fetch(&(mb->refcnt), 1, __ATOMIC_ACQ_REL))
+        return;
     if (!list_is_empty(&(mb->lead)))
         list_foreach_remove(&(mb->lead)) {
             detach_current_iterator;
