@@ -9,6 +9,7 @@
 struct recrouter {
     intrusive;
     uint32_t (*routing_tok)(struct laft_appender *);
+    void (*dtor_hook)(struct recrouter *);
 };
 
 #define     rrouter                 struct recrouter recrouter_ctl_

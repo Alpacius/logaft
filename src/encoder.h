@@ -7,6 +7,7 @@
 
 struct laft_encoder {
     struct mbuf *(*log_encode)(struct laft_encoder *, const char *);
+    void (*dtor_hook)(struct laft_encoder *);
 };
 
 #define     encoder                 struct laft_encoder encoder_ctl_

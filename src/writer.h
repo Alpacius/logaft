@@ -7,6 +7,7 @@
 
 struct laft_writer {
     int (*log_write)(struct laft_writer *, struct mbuf *);
+    void (*dtor_hook)(struct laft_writer *);
 };
 
 #define     writer                  struct laft_writer writer_ctl_
