@@ -2,8 +2,8 @@
 
 static void *task_worker_loop(void *arg);
 
-int task_executor_init(struct task_executor *e, uint32_t s, struct recrouter *r) {
-    (e->logrec_router = r), (e->size = s), __atomic_store_n(&(e->active), 0, __ATOMIC_RELEASE);
+int task_executor_init(struct task_executor *e, uint32_t s) {
+    (e->size = s), __atomic_store_n(&(e->active), 0, __ATOMIC_RELEASE);
     if (tqueue_init(&(e->tasks), s) < 1)
         return 0;
     pthread_barrier_init(&(e->active_barrier), NULL, s);
@@ -24,9 +24,9 @@ void task_executor_ruin(struct task_executor *e, struct link_index *t) {
     tqueue_ruin(&(e->tasks));
 }
 
-struct task_executor *task_executor_create(uint32_t size, struct recrouter *r) {
+struct task_executor *task_executor_create(uint32_t size) {
     struct task_executor *e = malloc(sizeof(struct task_executor) + sizeof(pthread_t) * size);
-    return e ? (task_executor_init(e, size, r) ? e : (free(e), NULL)) : NULL;
+    return e ? (task_executor_init(e, size) ? e : (free(e), NULL)) : NULL;
 }
 
 void task_executor_delete(struct task_executor *e, struct link_index *t) {
