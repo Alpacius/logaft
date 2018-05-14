@@ -9,7 +9,7 @@
 struct laft_appender {
     uint64_t id;
     intrusive;
-    struct laft_encoder *encoder;
-    struct laft_writer *writer;
+    struct laft_encoder *e;
+    struct laft_writer *w;
     // TODO rolling policy
 };

@@ -3,21 +3,21 @@
 static void *task_worker_loop(void *arg);
 
 int task_executor_init(struct task_executor *e, uint32_t s, struct recrouter *r) {
-    (e->logrec_router = r), (e->size = s), __atomic_store_n(&(e->active), 0, __ATOMIC_ACQ_REL);
+    (e->logrec_router = r), (e->size = s), __atomic_store_n(&(e->active), 0, __ATOMIC_RELEASE);
     if (tqueue_init(&(e->tasks), s) < 1)
         return 0;
-    pthread_barrier_init(&(e->active_barrier), NULL, size);
+    pthread_barrier_init(&(e->active_barrier), NULL, s);
     for (uint32_t i = 0; i < s; i++)
         pthread_create(&(e->workers[i]), NULL, task_worker_loop, e);
-    __atomic_store_n(&(e->active), 1, __ATOMIC_ACQ_REL);
+    __atomic_store_n(&(e->active), 1, __ATOMIC_RELEASE);
     return 1;
 }
 
 void task_executor_ruin(struct task_executor *e, struct link_index *t) {
-    __atomic_store_n(&(e->active), 0, __ATOMIC_ACQ_REL);
+    __atomic_store_n(&(e->active), 0, __ATOMIC_RELEASE);
     void *tret = NULL;
     for (uint32_t i = 0; i < e->size; i++)
-        pthread_join(&(e->workers[i]), &tret);
+        pthread_join(e->workers[i], &tret);
     if (t) {
         // TODO dump tasks for further deletion
     }
