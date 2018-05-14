@@ -57,6 +57,14 @@ void pqueue_push_back(struct pqueue *pq, struct link_index *elt) {
     pthread_mutex_unlock(&(pq->q[idx].l));
 }
 
+static
+void pqueue_push_back_m(struct pqueue *pq, struct link_index *elt, uint32_t tok) {
+    uint32_t idx = tok % pq->size;
+    pthread_mutex_lock(&(pq->q[idx].l));
+    cp_buffer_produce(&(pq->q[idx].r), elt);
+    pthread_mutex_unlock(&(pq->q[idx].l));
+}
+
 static inline
 struct link_index *pqueue_shift(struct pqueue *pq, uint32_t tok) {
     struct link_index *q = NULL;

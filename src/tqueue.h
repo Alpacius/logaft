@@ -40,4 +40,10 @@ void tqueue_push_back(struct tqueue *tq, struct link_index *elt) {
     sem_post(&(tq->sem));   // XXX dangerous
 } 
 
+static inline
+void tqueue_push_back_m(struct tqueue *tq, struct link_index *elt, uint32_t tok) {
+    pqueue_push_back_m(tq->q, elt, tok);
+    sem_post(&(tq->sem));   // XXX dangerous
+}
+
 // TODO post-decay unsafe operations

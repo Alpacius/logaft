@@ -38,6 +38,10 @@ int task_executor_sumbit(struct task_executor *e, struct tasklet *t) {
     return tqueue_push_back(&(e->tasks), intrusion_from_ptr(t)), 0;
 }
 
+int task_executor_submit_m(struct task_executor *e, struct tasklet *t, uint32_t tok) {
+    return tqueue_push_back_m(&(e->tasks), intrusion_from_ptr(t), tok), 0;
+}
+
 static
 void *task_worker_loop(void *arg) {
     struct task_executor *e = arg;
