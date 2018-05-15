@@ -28,6 +28,7 @@ void tqueue_ruin(struct tqueue *tq) {
     pqueue_delete(tq->q);
     for (uint32_t i = 0; i < tq->size; i++)
         sem_destroy(&(tq->sem[i]));
+    free(tq->sem);
 }
 
 static inline
