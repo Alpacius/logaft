@@ -24,3 +24,8 @@ struct task_executor {
     struct tqueue tasks;
     pthread_t workers[];
 };
+
+struct task_executor *task_executor_create(uint32_t size);
+void task_executor_delete(struct task_executor *e, struct link_index *t);
+int task_executor_sumbit(struct task_executor *e, struct tasklet *t);
+int task_executor_submit_m(struct task_executor *e, struct tasklet *t, uint32_t tok);
