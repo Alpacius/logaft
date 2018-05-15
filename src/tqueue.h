@@ -50,4 +50,19 @@ static inline
 void tqueue_push_back(struct tqueue *tq, struct link_index *elt) {
     tqueue_push_back_m(tq, elt, __atomic_fetch_add(&(tq->lbidx), 1, __ATOMIC_ACQ_REL) % tq->size);
 } 
+
+static inline
+int tqueue_wakeup_chan(struct tqueue *tq, uint32_t tok) {
+    return sem_post(&(tq->sem[tok % tq->size]));
+}
+
+static inline
+void tqueue_wakeup_all(struct tqueue *tq, int *reslist) {
+    if (reslist)
+        memset(reslist, 0, sizeof(int) * tq->size);
+    for (uint32_t i = 0; i < tq->size; i++)
+        if ((sem_post(&(tq->sem[i])) == -1) && reslist)
+            reslist[i] = -1;
+}
+
 // TODO post-decay unsafe operations

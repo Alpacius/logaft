@@ -18,6 +18,7 @@ static
 void task_executor_ruin(struct task_executor *e, struct link_index *t) {
     __atomic_store_n(&(e->active), 0, __ATOMIC_RELEASE);
     void *tret = NULL;
+    tqueue_wakeup_all(&(e->tasks), NULL);
     for (uint32_t i = 0; i < e->size; i++)
         pthread_join(e->workers[i], &tret);
     if (t) {
@@ -44,13 +45,10 @@ int task_executor_submit_m(struct task_executor *e, struct tasklet *t, uint32_t 
     return tqueue_push_back_m(&(e->tasks), intrusion_from_ptr(t), tok), 0;
 }
 
-#include    <stdio.h>
-
 static
 void *task_worker_loop(void *arg) {
     struct task_executor *e = arg;
     pthread_barrier_wait(&(e->active_barrier));
-    fprintf(stderr, "[Thread %u] ready\n", do_gettid() % e->size);
     while (__atomic_load_n(&(e->active), __ATOMIC_ACQUIRE)) {
         // FIXME brutal implementation
         struct link_index *tref = tqueue_shift(&(e->tasks), do_gettid() % e->size);
