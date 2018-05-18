@@ -15,3 +15,10 @@ static inline
 uint64_t epoch_adjusted_ms(int64_t diff) {
     return epoch_current_ms() + diff;
 }
+
+static inline
+struct timespec epoch_current_time(void) {
+    struct timespec timeval;
+    clock_gettime(CLOCK_REALTIME_COARSE, &timeval);
+    return timeval;
+}
