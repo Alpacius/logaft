@@ -1,14 +1,5 @@
 #include    "mbuf.h"
 
-struct mbuf {
-    intrusive;
-    struct link_index lead;
-    size_t size, cap;
-    uint32_t refcnt;
-    uint32_t nblks;
-    char blk[];
-};
-
 struct mbuf *mbuf_create_cstr(const char *cstr) {
     size_t cap = strlen(cstr) + 1;
     struct mbuf *mb = malloc(sizeof(struct mbuf) + sizeof(char) * cap);
@@ -72,4 +63,3 @@ int mbuf_append_cstr(struct mbuf *master, const char *cstr) {
 int mbuf_append_mbuf(struct mbuf *master, struct mbuf *slave) {
     return list_add_tail(intrusion_from_ptr(slave), &(master->lead)), (master->nblks++), 1;
 }
-

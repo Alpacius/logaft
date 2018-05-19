@@ -4,7 +4,14 @@
 #include    "linux_common.h"
 #include    "list.h"
 
-struct mbuf;
+struct mbuf {
+    intrusive;
+    struct link_index lead;
+    size_t size, cap;
+    uint32_t refcnt;
+    uint32_t nblks;
+    char blk[];
+};
 
 struct mbuf *mbuf_create_cstr(const char *cstr);
 void mbuf_borrow(struct mbuf *mb);      // MT-unsafe
