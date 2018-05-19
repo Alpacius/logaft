@@ -4,9 +4,10 @@
 #include    "linux_common.h"
 #include    "miscutils.h"
 #include    "mbuf.h"
+#include    "loglevel.h"
 
 struct laft_encoder {
-    struct mbuf *(*log_encode)(struct laft_encoder *, const char *);
+    struct mbuf *(*log_encode)(int level, struct laft_encoder *, const char *);
     void (*dtor_hook)(struct laft_encoder *);
 };
 
