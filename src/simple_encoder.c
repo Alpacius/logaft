@@ -27,7 +27,7 @@ struct mbuf *simple_encoder_encode(int level, struct laft_encoder *e, const char
     mbuf_append_mbuf(lv, content);
     time_t timer = time(NULL);
     struct tm tmval;
-    gmtime_r(&timer, &tmval);
+    localtime_r(&timer, &tmval);
     prefix->blk[0] = '[';
     ssize_t timestr_len = 0;
     if ((timestr_len = strftime(prefix->blk + 1, SIMPLE_DATESTR_LEN - 4, eimpl->date_tmpl.v, &tmval)) == 0) {
