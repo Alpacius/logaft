@@ -13,4 +13,4 @@ struct laft_simple_encoder {
 
 struct laft_encoder *laft_simple_encoder_create(struct laft_sds date_tmpl);
 
-#define laft_default_encoder laft_simple_encoder_create(laft_sds_literal("%D %T"))
+#define laft_default_encoder laft_simple_encoder_create(laft_sds_literal("%F %T"))
