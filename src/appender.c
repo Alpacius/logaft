@@ -15,6 +15,9 @@ struct append_tasklet {
 static uint32_t id_cntr = 0; 
 
 
+static struct tasklet *append_tasklet_create(struct laft_appender *a, char *csref, int level);
+
+
 struct laft_appender *laft_appender_create(struct laft_encoder *e, struct laft_writer *w) {
     struct laft_appender *a = malloc(sizeof(struct laft_appender));
     if (unlikely(a == NULL))
@@ -26,4 +29,41 @@ struct laft_appender *laft_appender_create(struct laft_encoder *e, struct laft_w
         (a->w = w),
         (a->r = common_recrouter()),
         a;
+}
+
+int laft_log_append(struct laft_appender *a, int level, char *content) {
+    struct tasklet *t = append_tasklet_create(a, content, level);
+    if (unlikely(t == NULL))
+        return 0;
+    struct task_executor *x = common_executor();
+    int ret = task_executor_submit_m(x, t, a->r->routing_tok(a->r, a));
+    return ret ?
+        1 :
+        t->dtor_hook(t), 0;
+}
+
+static
+int append_tasklet_execute(struct tasklet *t) {
+    // TODO implementation
+    return 0;
+}
+
+static
+void append_tasklet_dtor_hook(struct tasklet *t) {
+    struct append_tasklet *timpl = tasklet_host(t, struct append_tasklet);
+    laft_sds_release(timpl->content);
+    free(timpl);
+}
+
+static
+struct tasklet *append_tasklet_create(struct laft_appender *a, char *csref, int level) {
+    struct append_tasklet *t = malloc(sizeof(struct append_tasklet));
+    if (unlikely(t == NULL))
+        return NULL;
+    return 
+        (t->tasklet_ctl_.execute = append_tasklet_execute),
+        (t->tasklet_ctl_.dtor_hook = append_tasklet_dtor_hook),
+        (t->level = level),
+        (t->content = laft_sds_ref(csref)),
+        tasklet_from_ptr(t);
 }
