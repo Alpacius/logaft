@@ -45,12 +45,10 @@ int laft_log_append(struct laft_appender *a, int level, char *content) {
 static
 int append_tasklet_execute(struct tasklet *t) {
     struct append_tasklet *timpl = tasklet_host(t, struct append_tasklet);
-    // encoding
     struct laft_encoder *e = timpl->a->e;
     struct mbuf *blks = e->log_encode(timpl->level, e, timpl->content.v);
     if (unlikely(blks == NULL))
         return 0;
-    // writing
     struct laft_writer *w = timpl->a->w;
     return w->log_write(w, blks);
 }
