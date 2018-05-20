@@ -4,12 +4,10 @@
 #include    "linux_common.h"
 #include    "miscutils.h"
 #include    "list.h"
-#include    "appender.h"
 
 struct recrouter {
     intrusive;
-    uint32_t (*routing_tok)(struct laft_appender *);
-    void (*set_mod_size)(uint32_t);
+    uint32_t (*routing_tok)(struct recrouter *, void *seed);
     void (*dtor_hook)(struct recrouter *);
 };
 
