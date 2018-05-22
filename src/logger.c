@@ -33,5 +33,5 @@ int laft_logger_request(struct laft_logger *l, int level, char *content) {
         struct laft_appender *a = intrusive_ref(struct laft_appender);
         laft_log_append(a, level, content);
     }
-    return 0;
+    return 1;
 }
