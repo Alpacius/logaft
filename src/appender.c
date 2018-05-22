@@ -31,12 +31,18 @@ struct laft_appender *laft_appender_create(struct laft_encoder *e, struct laft_w
         a;
 }
 
+void laft_appender_destroy(struct laft_appender *a) {
+    a->e->dtor_hook(a->e);
+    a->w->dtor_hook(a->w);
+    free(a);
+}
+
 int laft_log_append(struct laft_appender *a, int level, char *content) {
-    struct tasklet *t = append_tasklet_create(a, content, level);
+    struct tasklet *t = append_tasklet_create(a, content, level);       // TODO epoch hint
     if (unlikely(t == NULL))
         return 0;
     struct task_executor *x = common_executor();
-    int ret = task_executor_submit_m(x, t, a->r->routing_tok(a->r, a));
+    int ret = task_executor_submit_m(x, t, a->r->routing_tok(a->r, a)); 
     return ret ?
         1 :
         t->dtor_hook(t), 0;

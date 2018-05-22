@@ -7,8 +7,12 @@
 #include    "loglevel.h"
 
 struct laft_logger {
-    uint64_t id;
+    uint32_t id;
     intrusive;
     int level;
     struct link_index appenders;
 };
+
+struct laft_logger *laft_logger_create(int level, struct link_index *appenders);
+void laft_logger_destroy(struct laft_logger *l);
+int laft_logger_request(struct laft_logger *l, int level, char *content);
