@@ -20,7 +20,8 @@ struct mbuf *mbuf_create_triv(size_t cap) {
     return mb ? 
         list_init(intrusion_from_ptr(mb)), 
         list_init(&(mb->lead)), 
-        (mb->size = mb->cap = cap), 
+        (mb->size = 0), 
+        (mb->cap = cap), 
         list_add_tail(intrusion_from_ptr(mb), &(mb->lead)),
         (mb->nblks = 1),
         (mb->refcnt = 1),
