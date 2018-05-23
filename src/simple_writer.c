@@ -33,7 +33,7 @@ int sw_log_write(struct laft_writer *w, struct mbuf *mb) {
     time_t t = time(NULL);
     struct tm d;
     localtime_r(&t, &d);
-    int wday_curr = wimpl->actualpath[wimpl->pathlen - 2];
+    int wday_curr = wimpl->actualpath[wimpl->pathlen - 2] - '0';
     if (wday_curr != d.tm_wday) {
         close(wimpl->current_fd);
         sprintf(wimpl->actualpath, "%s.%d", wimpl->fullpath, d.tm_wday);
