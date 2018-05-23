@@ -24,7 +24,7 @@ int do_log_write(struct simple_writer *w, struct mbuf *mb) {
     ret = writev(w->current_fd, iov, mb->nblks);
     if (unlikely(iov_dyn))
         free(iov);
-    return ret;
+    return ret > -1;
 }
 
 static
