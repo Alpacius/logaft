@@ -48,12 +48,18 @@ void sw_dtor_hook(struct laft_writer *w) {
     __auto_type wimpl = log_writer_impl(w, struct simple_writer);
     if (wimpl->current_fd > -1)
         close(wimpl->current_fd);
+    free(wimpl->fullpath);
     free(wimpl);
 }
 
 struct laft_writer *simple_writer_create(const char *logpath) {
     size_t len = strlen(logpath) + 2 + 1;
     struct simple_writer *w = malloc(sizeof(struct simple_writer) + sizeof(char) * len);
+    if (unlikely(w == NULL))
+        return NULL;
+    w->fullpath = malloc(sizeof(char) * (len - 2));
+    if (unlikely(w->fullpath == NULL))
+        return free(w), NULL;
     time_t t = time(NULL);
     struct tm d;
     localtime_r(&t, &d);
@@ -63,6 +69,6 @@ struct laft_writer *simple_writer_create(const char *logpath) {
         (w->current_fd = open(w->actualpath, O_CREAT|O_CLOEXEC)),
         (w->writer_ctl_.log_write = sw_log_write),
         (w->writer_ctl_.dtor_hook = sw_dtor_hook),
-        (w->fullpath = logpath),
+        strcpy(w->fullpath, logpath),
         log_writer_from_ptr(w);
 }

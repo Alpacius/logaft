@@ -4,7 +4,7 @@
 
 struct simple_writer {
     log_writer;
-    const char *fullpath;
+    char *fullpath;     // TODO opt
     int current_fd;
     size_t pathlen;
     char actualpath[];
