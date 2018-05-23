@@ -41,7 +41,9 @@ int sw_log_write(struct laft_writer *w, struct mbuf *mb) {
     }
     if (unlikely(wimpl->current_fd == -1))
         return 0;
-    return do_log_write(wimpl, mb);
+    int ret = do_log_write(wimpl, mb);
+    mbuf_destroy(mb);
+    return ret;
 }
 
 static
