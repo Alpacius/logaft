@@ -44,6 +44,7 @@ int sw_log_write(struct laft_writer *w, struct mbuf *mb) {
     return do_log_write(wimpl, mb);
 }
 
+static
 void sw_dtor_hook(struct laft_writer *w) {
     __auto_type wimpl = log_writer_impl(w, struct simple_writer);
     if (wimpl->current_fd > -1)

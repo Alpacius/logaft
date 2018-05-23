@@ -9,3 +9,5 @@ struct simple_writer {
     size_t pathlen;
     char actualpath[];
 };
+
+struct laft_writer *simple_writer_create(const char *logpath);
