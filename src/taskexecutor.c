@@ -38,11 +38,11 @@ void task_executor_delete(struct task_executor *e, struct link_index *t) {
 }
 
 int task_executor_sumbit(struct task_executor *e, struct tasklet *t) {
-    return tqueue_push_back(&(e->tasks), intrusion_from_ptr(t)), 0;
+    return tqueue_push_back(&(e->tasks), intrusion_from_ptr(t)), 1;
 }
 
 int task_executor_submit_m(struct task_executor *e, struct tasklet *t, uint32_t tok) {
-    return tqueue_push_back_m(&(e->tasks), intrusion_from_ptr(t), tok), 0;
+    return tqueue_push_back_m(&(e->tasks), intrusion_from_ptr(t), tok), 1;
 }
 
 static

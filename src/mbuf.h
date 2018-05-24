@@ -14,6 +14,7 @@ struct mbuf {
 };
 
 struct mbuf *mbuf_create_cstr(const char *cstr);
+struct mbuf *mbuf_create_cstrln(const char *cstr);
 void mbuf_borrow(struct mbuf *mb);      // MT-unsafe
 void mbuf_destroy(struct mbuf *mb);
 int mbuf_append_cstr(struct mbuf *master, const char *cstr);

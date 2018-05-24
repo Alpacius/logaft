@@ -71,10 +71,14 @@ struct tasklet *append_tasklet_create(struct laft_appender *a, char *csref, int 
     struct append_tasklet *t = malloc(sizeof(struct append_tasklet));
     if (unlikely(t == NULL))
         return NULL;
-    return 
+    size_t cslen = strlen(csref) + 1;
+    char *csref_ = malloc(sizeof(char) * cslen);
+    memcpy(csref_, csref, cslen);
+    return
+        (t->a = a),
         (t->tasklet_ctl_.execute = append_tasklet_execute),
         (t->tasklet_ctl_.dtor_hook = append_tasklet_dtor_hook),
         (t->level = level),
-        (t->content = laft_sds_ref(csref)),
+        (t->content = laft_sds_ref(csref_)),
         tasklet_from_ptr(t);
 }

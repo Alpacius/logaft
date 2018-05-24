@@ -2,7 +2,7 @@
 #include    "simple_rrouter.h"
 
 
-#define     N_LOG_THREADS       2
+#define     N_LOG_THREADS       1
 
 static struct task_executor *default_executor = NULL;
 static struct recrouter *default_rrouter = NULL;

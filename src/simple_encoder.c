@@ -16,7 +16,7 @@ struct mbuf *simple_encoder_encode(int level, struct laft_encoder *e, const char
     if (unlikely(level < 0))
         return NULL;
     struct laft_simple_encoder *eimpl = log_encoder_impl(e, struct laft_simple_encoder);
-    struct mbuf *lv = mbuf_create_cstr(level_desc_tbl[level]), *prefix = mbuf_create_triv(SIMPLE_DATESTR_LEN), *content = mbuf_create_cstr(cstr);
+    struct mbuf *lv = mbuf_create_cstr(level_desc_tbl[level]), *prefix = mbuf_create_triv(SIMPLE_DATESTR_LEN), *content = mbuf_create_cstrln(cstr);
     if (unlikely(lv == NULL), (prefix == NULL) || unlikely(content == NULL)) {
         (lv == NULL) && (mbuf_destroy(lv), 114514);
         (prefix == NULL) && (mbuf_destroy(prefix), 114514);
@@ -37,6 +37,7 @@ struct mbuf *simple_encoder_encode(int level, struct laft_encoder *e, const char
     prefix->blk[timestr_len + 1] = ']';
     prefix->blk[timestr_len + 2] = ' ';
     prefix->blk[timestr_len + 3] = '\0';
+    prefix->size = strlen(prefix->blk) + 1;
     return lv;
 }
 

@@ -15,6 +15,22 @@ struct mbuf *mbuf_create_cstr(const char *cstr) {
         NULL;
 }
 
+struct mbuf *mbuf_create_cstrln(const char *cstr) {
+    size_t cap = strlen(cstr) + 2;
+    struct mbuf *mb = malloc(sizeof(struct mbuf) + sizeof(char) * cap);
+    return mb ? 
+        list_init(intrusion_from_ptr(mb)), 
+        list_init(&(mb->lead)), 
+        list_add_tail(intrusion_from_ptr(mb), &(mb->lead)),
+        (mb->size = mb->cap = cap), 
+        (mb->nblks = 1),
+        (mb->refcnt = 1),
+        memcpy(mb->blk, cstr, sizeof(char) * cap), 
+        (mb->blk[cap - 2] = '\n'), (mb->blk[cap - 1] = '\0'),
+        mb :
+        NULL;
+}
+
 struct mbuf *mbuf_create_triv(size_t cap) {
     struct mbuf *mb = malloc(sizeof(struct mbuf) + sizeof(char) * cap);
     return mb ? 

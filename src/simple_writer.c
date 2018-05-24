@@ -5,6 +5,8 @@
 
 #define     IOV_IMM_THRES           16
 
+#include    <stdio.h>
+
 static inline
 int do_log_write(struct simple_writer *w, struct mbuf *mb) {
     int ret = 1, iov_dyn = 0;
@@ -37,7 +39,7 @@ int sw_log_write(struct laft_writer *w, struct mbuf *mb) {
     if (wday_curr != d.tm_wday) {
         close(wimpl->current_fd);
         sprintf(wimpl->actualpath, "%s.%d", wimpl->fullpath, d.tm_wday);
-        wimpl->current_fd = open(wimpl->actualpath, O_CREAT|O_CLOEXEC);
+        wimpl->current_fd = open(wimpl->actualpath, O_RDWR|O_CREAT|O_APPEND|O_CLOEXEC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
     }
     if (unlikely(wimpl->current_fd == -1))
         return 0;
@@ -69,7 +71,7 @@ struct laft_writer *simple_writer_create(const char *logpath) {
     return 
         sprintf(w->actualpath, "%s.%d", logpath, d.tm_wday),
         (w->pathlen = len),
-        (w->current_fd = open(w->actualpath, O_CREAT|O_CLOEXEC)),
+        (w->current_fd = open(w->actualpath, O_RDWR|O_CREAT|O_APPEND|O_CLOEXEC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)),
         (w->writer_ctl_.log_write = sw_log_write),
         (w->writer_ctl_.dtor_hook = sw_dtor_hook),
         strcpy(w->fullpath, logpath),
