@@ -89,3 +89,14 @@ int pqueue_dump(struct pqueue *pq, uint32_t tok, struct link_index *t) {
     list_move(t, q);
     return 1;
 }
+
+static inline
+void pqueue_clear(struct pqueue *pq, struct link_index *t) {
+    list_init(t);
+    for (uint32_t i = 0; i < pq->size; i++)
+        for (uint32_t j = 0; j < 2; j++)
+            list_foreach_remove(&(pq->q[i].r.buffers[j])) {
+                detach_current_iterator;
+                list_add_tail(current_iterator, t);
+            }
+}

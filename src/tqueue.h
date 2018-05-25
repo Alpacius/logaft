@@ -66,4 +66,7 @@ void tqueue_wakeup_all(struct tqueue *tq, int *reslist) {
             reslist[i] = -1;
 }
 
-// TODO post-decay unsafe operations
+static inline
+void tqueue_clear(struct tqueue *tq, struct link_index *t) {
+    pqueue_clear(tq->q, t);
+}

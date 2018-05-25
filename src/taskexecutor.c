@@ -22,7 +22,15 @@ void task_executor_ruin(struct task_executor *e, struct link_index *t) {
     for (uint32_t i = 0; i < e->size; i++)
         pthread_join(e->workers[i], &tret);
     if (t) {
-        // TODO dump tasks for further deletion
+        tqueue_clear(&(e->tasks), t);
+    } else {
+        struct link_index r;
+        tqueue_clear(&(e->tasks), &r);
+        list_foreach_remove(&r) {
+            detach_current_iterator;
+            __auto_type rt = intrusive_ref(struct tasklet);
+            rt->dtor_hook(rt);
+        }
     }
     tqueue_ruin(&(e->tasks));
 }
@@ -54,7 +62,7 @@ void *task_worker_loop(void *arg) {
         struct link_index *tref = tqueue_shift(&(e->tasks), do_gettid() % e->size);
         if (unlikely(tref == NULL))
             continue;
-        struct tasklet *task = intruded_val(tref, struct tasklet);
+        __auto_type task = intruded_val(tref, struct tasklet);
         task->execute(task);
         task->dtor_hook(task);
     }
