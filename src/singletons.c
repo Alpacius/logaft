@@ -14,6 +14,11 @@ int laft_init(void) {
     return 0;
 }
 
+int laft_ruin(void) {
+    task_executor_delete(default_executor, NULL);
+    default_rrouter->dtor_hook(default_rrouter);
+}
+
 struct task_executor *common_executor(void) {
     return default_executor;
 }
