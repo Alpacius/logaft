@@ -1,4 +1,5 @@
 #include    "logger.h"
+#include    "singletons.h"
 
 
 static uint32_t id_cnt = 0; 
