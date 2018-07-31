@@ -14,7 +14,7 @@ int do_log_write(struct simple_writer *w, struct mbuf *mb) {
     struct iovec *iov = 
         (mb->nblks <= IOV_IMM_THRES) ?
         alloca(sizeof(struct iovec) * mb->nblks) :
-        ((iov_dyn = 0), malloc(sizeof(struct iovec) * mb->nblks));
+        ((iov_dyn = 1), malloc(sizeof(struct iovec) * mb->nblks));
     if (unlikely(iov == NULL))
         return 0;
     list_foreach(&(mb->lead)) {
